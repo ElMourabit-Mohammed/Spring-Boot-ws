@@ -1,5 +1,6 @@
 package com.myapp.ws.ws_app.controllers;
 
+import com.myapp.ws.ws_app.repositories.UserRepository;
 import com.myapp.ws.ws_app.requests.UserRequest;
 import com.myapp.ws.ws_app.responses.UserResponse;
 import com.myapp.ws.ws_app.services.UserService;
@@ -14,6 +15,7 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
     @GetMapping
     public String getUser(){
         return "get user was called";
@@ -28,7 +30,7 @@ public class UserController {
         UserDto createUser = userService.createUser(userDto);
 
         UserResponse userResponse = new UserResponse();
-        BeanUtils.copyProperties(userDto , userResponse);
+        BeanUtils.copyProperties(createUser , userResponse);
 
         return  userResponse;
     }

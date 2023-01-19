@@ -1,11 +1,14 @@
 package com.myapp.ws.ws_app.shared.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
 public class UserDto implements Serializable {
 
 
@@ -18,6 +21,6 @@ public class UserDto implements Serializable {
     private String email;
     private String password;
     private String encryptedPassword;
-    private String emailVerificationToken ;
+    private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
 }
