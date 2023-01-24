@@ -7,6 +7,7 @@ import com.myapp.ws.ws_app.shared.dto.UserDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping(path="/{id}")
+    @GetMapping(path="/{id}" , produces= {MediaType.APPLICATION_XML_VALUE , MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> getUser(@PathVariable String id){
 
         UserDto userDto = userService.getUserByUserId(id);
@@ -28,7 +29,8 @@ public class UserController {
         return new ResponseEntity<UserResponse>(userResponse, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(consumes={MediaType.APPLICATION_XML_VALUE , MediaType.APPLICATION_JSON_VALUE},
+                 produces={MediaType.APPLICATION_XML_VALUE , MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest userRequest){
 
         UserDto userDto = new UserDto();
@@ -41,7 +43,9 @@ public class UserController {
 
         return new ResponseEntity<UserResponse>(userResponse, HttpStatus.CREATED);
     }
-    @PutMapping(path="/{id}")
+    @PutMapping(path="/{id}" ,
+            consumes={MediaType.APPLICATION_XML_VALUE , MediaType.APPLICATION_JSON_VALUE},
+            produces={MediaType.APPLICATION_XML_VALUE , MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> updateUser(@PathVariable String id ,@RequestBody UserRequest userRequest){
 
         UserDto userDto = new UserDto();
