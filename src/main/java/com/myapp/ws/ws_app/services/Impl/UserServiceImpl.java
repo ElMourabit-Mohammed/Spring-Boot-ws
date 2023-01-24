@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(user , userEntity);
 
         userEntity.setUserId(utils.userIdGenerated());
-        userEntity.setEncryptedPassword("Encrypted Password");
+        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         UserEntity newUser = userRepository.save(userEntity);
 
@@ -67,5 +67,44 @@ public class UserServiceImpl implements UserService {
 
         return userDto;
 
+    }
+
+    @Override
+    public UserDto getUserByUserId(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if(userEntity == null) throw new UsernameNotFoundException(userId);
+
+        UserDto userDto = new UserDto();
+
+        BeanUtils.copyProperties(userEntity, userDto);
+
+        return userDto;
+    }
+
+    @Override
+    public UserDto updateUser(String userId, UserDto user) {
+
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if(userEntity == null) throw new UsernameNotFoundException(userId);
+
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
+
+        UserEntity updatedUser = userRepository.save(userEntity);
+
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(updatedUser , userDto);
+
+        return userDto;
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if(userEntity == null) throw new UsernameNotFoundException(userId);
+
+        userRepository.delete(userEntity);
     }
 }
