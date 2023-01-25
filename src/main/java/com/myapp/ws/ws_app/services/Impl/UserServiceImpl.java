@@ -7,6 +7,9 @@ import com.myapp.ws.ws_app.shared.Utils;
 import com.myapp.ws.ws_app.shared.dto.UserDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -106,5 +110,25 @@ public class UserServiceImpl implements UserService {
         if(userEntity == null) throw new UsernameNotFoundException(userId);
 
         userRepository.delete(userEntity);
+    }
+
+    @Override
+    public List<UserDto> getUsers(int page, int limit) {
+        if(page >0) page -=1;
+        List<UserDto> userDto = new ArrayList<>();
+
+        Pageable pagealeRequeqt = PageRequest.of(page, limit);
+        Page<UserEntity> userPage =userRepository.findAll(pagealeRequeqt);
+
+        List<UserEntity> users = userPage.getContent();
+
+        for(UserEntity userEntity : users){
+            UserDto user = new UserDto();
+            BeanUtils.copyProperties(userEntity , user);
+
+            userDto.add(user);
+        }
+
+        return userDto;
     }
 }

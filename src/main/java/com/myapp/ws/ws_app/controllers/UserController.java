@@ -13,6 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -29,6 +33,22 @@ public class UserController {
         BeanUtils.copyProperties(userDto , userResponse);
 
         return new ResponseEntity<UserResponse>(userResponse, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public List<UserResponse> getAllUsers(@RequestParam(value = "page" , defaultValue = "1") int page ,
+                                          @RequestParam(value = "limit" , defaultValue = "5") int limit){
+
+        List<UserResponse> userResponseList = new ArrayList<>();
+        List<UserDto> users =  userService.getUsers(page, limit);
+
+        for(UserDto userDto : users){
+            UserResponse userResponse = new UserResponse();
+            BeanUtils.copyProperties(userDto , userResponse);
+
+            userResponseList.add(userResponse);
+        }
+        return userResponseList;
     }
 
     @PostMapping(consumes={MediaType.APPLICATION_XML_VALUE , MediaType.APPLICATION_JSON_VALUE},
