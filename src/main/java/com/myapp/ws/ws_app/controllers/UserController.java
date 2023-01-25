@@ -1,6 +1,8 @@
 package com.myapp.ws.ws_app.controllers;
 
+import com.myapp.ws.ws_app.exceptions.UserException;
 import com.myapp.ws.ws_app.requests.UserRequest;
+import com.myapp.ws.ws_app.responses.ErrorMessages;
 import com.myapp.ws.ws_app.responses.UserResponse;
 import com.myapp.ws.ws_app.services.UserService;
 import com.myapp.ws.ws_app.shared.dto.UserDto;
@@ -32,6 +34,7 @@ public class UserController {
     @PostMapping(consumes={MediaType.APPLICATION_XML_VALUE , MediaType.APPLICATION_JSON_VALUE},
                  produces={MediaType.APPLICATION_XML_VALUE , MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest userRequest){
+        if(userRequest.getFirstName().isEmpty()) throw new UserException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userRequest , userDto);
