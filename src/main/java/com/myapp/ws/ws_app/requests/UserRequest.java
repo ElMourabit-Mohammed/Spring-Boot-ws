@@ -26,6 +26,7 @@ public class UserRequest {
     private String password;
 
     private List<AddressRequest> addresses;
+    private ContactRequest contact;
 
     public String getFirstName() {
         return firstName;
@@ -65,5 +66,13 @@ public class UserRequest {
 
     public void setAddresses(List<AddressRequest> addresses) {
         this.addresses = addresses;
+    }
+
+    public ContactRequest getContact() {
+        return contact;
+    }
+
+    public void setContact(ContactRequest contact) {
+        this.contact = contact;
     }
 }

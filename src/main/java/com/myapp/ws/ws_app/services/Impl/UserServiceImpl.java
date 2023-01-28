@@ -50,6 +50,10 @@ public class UserServiceImpl implements UserService {
 
             user.getAddresses().set(i,address);
         }
+
+        user.getContact().setContactId(utils.stringIdGenerated());
+        user.getContact().setUser(user);
+
         ModelMapper modelMapper = new ModelMapper();
         UserEntity userEntity =modelMapper.map(user,UserEntity.class);
 
