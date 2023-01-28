@@ -6,11 +6,13 @@ import com.myapp.ws.ws_app.responses.ErrorMessages;
 import com.myapp.ws.ws_app.responses.UserResponse;
 import com.myapp.ws.ws_app.services.UserService;
 import com.myapp.ws.ws_app.shared.dto.UserDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,13 +60,18 @@ public class UserController {
     public ResponseEntity<UserResponse> addUser(@RequestBody @Valid UserRequest userRequest) throws Exception{
         if(userRequest.getFirstName().isEmpty()) throw new UserException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(userRequest , userDto);
+//        UserDto userDto = new UserDto();
+//        BeanUtils.copyProperties(userRequest , userDto);
+
+        ModelMapper modelMapper = new ModelMapper();
+        UserDto userDto = modelMapper.map(userRequest , UserDto.class);
 
         UserDto createUser = userService.createUser(userDto);
 
-        UserResponse userResponse = new UserResponse();
-        BeanUtils.copyProperties(createUser , userResponse);
+//        UserResponse userResponse = new UserResponse();
+//        BeanUtils.copyProperties(createUser , userResponse);
+
+        UserResponse userResponse = modelMapper.map(createUser , UserResponse.class);
 
         return new ResponseEntity<UserResponse>(userResponse, HttpStatus.CREATED);
     }

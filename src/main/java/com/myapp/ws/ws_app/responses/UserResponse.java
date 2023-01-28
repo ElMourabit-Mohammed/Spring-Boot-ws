@@ -1,7 +1,13 @@
 package com.myapp.ws.ws_app.responses;
 
+import java.util.List;
+
 public class UserResponse {
     private String userId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private List<AddressResponse> addresses;
 
     public String getUserId() {
         return userId;
@@ -35,7 +41,11 @@ public class UserResponse {
         this.email = email;
     }
 
-    private String firstName;
-    private String lastName;
-    private String email;
+    public List<AddressResponse> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressResponse> addresses) {
+        this.addresses = addresses;
+    }
 }

@@ -7,7 +7,7 @@ import java.util.UUID;
 @Component
 public class Utils {
 
-    public String userIdGenerated(){
+    public String stringIdGenerated(){
         String uniqueID = UUID.randomUUID().toString();
         return uniqueID;
     }

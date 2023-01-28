@@ -5,6 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class UserRequest {
 
@@ -23,6 +24,8 @@ public class UserRequest {
     @Pattern(regexp="(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$",
             message="ce mot de passe doit avoir des lettres en Maj et Minsc et numero")
     private String password;
+
+    private List<AddressRequest> addresses;
 
     public String getFirstName() {
         return firstName;
@@ -54,5 +57,13 @@ public class UserRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<AddressRequest> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressRequest> addresses) {
+        this.addresses = addresses;
     }
 }

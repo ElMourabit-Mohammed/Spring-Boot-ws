@@ -4,7 +4,9 @@ import com.myapp.ws.ws_app.entities.UserEntity;
 import com.myapp.ws.ws_app.repositories.UserRepository;
 import com.myapp.ws.ws_app.services.UserService;
 import com.myapp.ws.ws_app.shared.Utils;
+import com.myapp.ws.ws_app.shared.dto.AddressDto;
 import com.myapp.ws.ws_app.shared.dto.UserDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,16 +40,28 @@ public class UserServiceImpl implements UserService {
         UserEntity checkUser =  userRepository.findByEmail(user.getEmail());
         if (checkUser != null) throw new RuntimeException("User already exists!");
 
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(user , userEntity);
+//        UserEntity userEntity = new UserEntity();
+//        BeanUtils.copyProperties(user , userEntity);
 
-        userEntity.setUserId(utils.userIdGenerated());
+        for(int i=0 ; i<user.getAddresses().size() ; i++){
+            AddressDto address = user.getAddresses().get(i);
+            address.setUser(user);
+            address.setAddressId(utils.stringIdGenerated());
+
+            user.getAddresses().set(i,address);
+        }
+        ModelMapper modelMapper = new ModelMapper();
+        UserEntity userEntity =modelMapper.map(user,UserEntity.class);
+
+        userEntity.setUserId(utils.stringIdGenerated());
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         UserEntity newUser = userRepository.save(userEntity);
 
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(newUser , userDto);
+//        UserDto userDto = new UserDto();
+//        BeanUtils.copyProperties(newUser , userDto);
+
+        UserDto userDto = modelMapper.map(newUser , UserDto.class);
 
         return userDto;
     }
