@@ -141,8 +141,11 @@ public class UserServiceImpl implements UserService {
         List<UserEntity> users = userPage.getContent();
 
         for(UserEntity userEntity : users){
-            UserDto user = new UserDto();
-            BeanUtils.copyProperties(userEntity , user);
+//            UserDto user = new UserDto();
+//            BeanUtils.copyProperties(userEntity , user);
+
+            ModelMapper modelMapper = new ModelMapper();
+            UserDto user = modelMapper.map(userEntity , UserDto.class);
 
             userDto.add(user);
         }

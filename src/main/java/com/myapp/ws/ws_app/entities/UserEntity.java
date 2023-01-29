@@ -3,7 +3,9 @@ package com.myapp.ws.ws_app.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "users")
 
@@ -34,6 +36,8 @@ public class UserEntity implements Serializable {
     @OneToOne(mappedBy="user" ,fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private ContactEntity contact;
 
+    @ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL , mappedBy = "users")
+    private Set<GroupEntity> groups = new HashSet<>();
     public long getId() {
         return id;
     }
@@ -112,5 +116,13 @@ public class UserEntity implements Serializable {
 
     public void setContact(ContactEntity contact) {
         this.contact = contact;
+    }
+
+    public Set<GroupEntity> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<GroupEntity> groups) {
+        this.groups = groups;
     }
 }
