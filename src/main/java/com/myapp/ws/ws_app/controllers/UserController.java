@@ -40,23 +40,26 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserResponse> getAllUsers(@RequestParam(value = "page" , defaultValue = "1") int page ,
-                                          @RequestParam(value = "limit" , defaultValue = "5") int limit){
+    public List<UserResponse> getAllUsers(@RequestParam(value = "page" , defaultValue="1") int page,
+                                          @RequestParam(value = "limit" , defaultValue="8") int limit,
+                                          @RequestParam(value = "search" , defaultValue="") String search,
+                                          @RequestParam(value = "status" , defaultValue="1") int status){
+        List<UserResponse> usersResponse = new ArrayList<>();
 
-        List<UserResponse> userResponseList = new ArrayList<>();
-        List<UserDto> users =  userService.getUsers(page, limit);
+        List<UserDto> users = userService.getUsers(page , limit , search , status);
 
-        for(UserDto userDto : users){
+        for(UserDto userDto : users) {
 
-//            UserResponse userResponse = new UserResponse();
-//            BeanUtils.copyProperties(userDto , userResponse);
+            //UserResponse user = new UserResponse();
+            //BeanUtils.copyProperties(userDto, user);
 
             ModelMapper modelMapper = new ModelMapper();
-            UserResponse userResponse = modelMapper.map(userDto , UserResponse.class);
+            UserResponse user = modelMapper.map(userDto, UserResponse.class);
 
-            userResponseList.add(userResponse);
+            usersResponse.add(user);
         }
-        return userResponseList;
+
+        return usersResponse;
     }
 
     @PostMapping(consumes={MediaType.APPLICATION_XML_VALUE , MediaType.APPLICATION_JSON_VALUE},
