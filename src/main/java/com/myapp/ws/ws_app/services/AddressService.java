@@ -6,5 +6,5 @@ import com.myapp.ws.ws_app.shared.dto.AddressDto;
 import java.util.List;
 
 public interface AddressService {
-    List<AddressDto> getAllAddresses();
+    List<AddressDto> getAllAddresses(String email);
 }

@@ -1,7 +1,9 @@
 package com.myapp.ws.ws_app.services.Impl;
 
 import com.myapp.ws.ws_app.entities.AddressEntity;
+import com.myapp.ws.ws_app.entities.UserEntity;
 import com.myapp.ws.ws_app.repositories.AddressRepository;
+import com.myapp.ws.ws_app.repositories.UserRepository;
 import com.myapp.ws.ws_app.services.AddressService;
 import com.myapp.ws.ws_app.shared.dto.AddressDto;
 import org.modelmapper.ModelMapper;
@@ -18,9 +20,16 @@ public class AddressServiceImpl implements AddressService {
 
     @Autowired
      AddressRepository addressRepository;
+    @Autowired
+    UserRepository userRepository;
     @Override
-    public List<AddressDto> getAllAddresses() {
-        List<AddressEntity> addresses = (List<AddressEntity>) addressRepository.findAll();
+    public List<AddressDto> getAllAddresses(String email) {
+
+        UserEntity currentUser = userRepository.findByEmail(email);
+
+        List<AddressEntity> addresses = currentUser.getAdmin() == true ? (List<AddressEntity>) addressRepository.findAll() : addressRepository.findByUser(currentUser);
+
+        //List<AddressEntity> addresses = (List<AddressEntity>) addressRepository.findAll();
 
 //        List<AddressDto> addressDto = new ArrayList<>();
 //        for(AddressEntity addressEntity : addresses){

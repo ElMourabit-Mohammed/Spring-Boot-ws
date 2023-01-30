@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Type;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,9 +24,9 @@ public class AddressController {
     AddressService addressService;
 
     @GetMapping
-    public ResponseEntity<List<AddressResponse>> getAddresses() {
+    public ResponseEntity<List<AddressResponse>> getAddresses(Principal principal) {
 
-        List<AddressDto> addresses = addressService.getAllAddresses();
+        List<AddressDto> addresses = addressService.getAllAddresses(principal.getName());
         Type listType = new TypeToken<List<AddressResponse>>() {}.getType();
         List<AddressResponse> addressResponse = new ModelMapper().map(addresses, listType);
 
