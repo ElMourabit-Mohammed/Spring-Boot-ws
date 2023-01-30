@@ -8,6 +8,7 @@ public class UserDto implements Serializable {
     private static final long serialVersionUID = 1687940050034654259L;
     private long id;
     private String userId;
+    private Boolean admin;
     private String firstName;
     private String lastName;
     private String email;
@@ -105,5 +106,13 @@ public class UserDto implements Serializable {
 
     public void setContact(ContactDto contact) {
         this.contact = contact;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 }

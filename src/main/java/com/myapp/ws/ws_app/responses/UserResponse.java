@@ -4,6 +4,7 @@ import java.util.List;
 
 public class UserResponse {
     private String userId;
+    private Boolean admin;
     private String firstName;
     private String lastName;
     private String email;
@@ -56,5 +57,13 @@ public class UserResponse {
 
     public void setContact(ContactResponse contact) {
         this.contact = contact;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 }
