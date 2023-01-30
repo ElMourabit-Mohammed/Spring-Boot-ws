@@ -5,7 +5,9 @@ import com.myapp.ws.ws_app.entities.UserEntity;
 import com.myapp.ws.ws_app.repositories.AddressRepository;
 import com.myapp.ws.ws_app.repositories.UserRepository;
 import com.myapp.ws.ws_app.services.AddressService;
+import com.myapp.ws.ws_app.shared.Utils;
 import com.myapp.ws.ws_app.shared.dto.AddressDto;
+import com.myapp.ws.ws_app.shared.dto.UserDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class AddressServiceImpl implements AddressService {
      AddressRepository addressRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    Utils util;
     @Override
     public List<AddressDto> getAllAddresses(String email) {
 
@@ -43,5 +47,48 @@ public class AddressServiceImpl implements AddressService {
         List<AddressDto> addressesDto = new ModelMapper().map(addresses, listType);
 
         return addressesDto;
+    }
+
+    @Override
+    public AddressDto createAddress(AddressDto address, String email) {
+
+        UserEntity currentUser = userRepository.findByEmail(email);
+
+        ModelMapper modelMapper = new ModelMapper();
+        UserDto userDto = modelMapper.map(currentUser, UserDto.class);
+
+        address.setAddressId(util.stringIdGenerated());
+        address.setUser(userDto);
+
+        AddressEntity addressEntity = modelMapper.map(address, AddressEntity.class);
+
+        AddressEntity newAddress = addressRepository.save(addressEntity);
+
+        AddressDto addressDto = modelMapper.map(newAddress, AddressDto.class);
+
+        return addressDto;
+    }
+
+    @Override
+    public AddressDto getAddress(String addressId) {
+
+        AddressEntity addressEntity = addressRepository.findByAddressId(addressId);
+
+        ModelMapper modelMapper = new ModelMapper();
+
+        AddressDto addressDto = modelMapper.map(addressEntity, AddressDto.class);
+
+        return addressDto;
+    }
+
+    @Override
+    public void deleteAddress(String addressId) {
+
+        AddressEntity address = addressRepository.findByAddressId(addressId);
+
+        if(address == null) throw new RuntimeException("Address not found");
+
+        addressRepository.delete(address);
+
     }
 }
